@@ -9,35 +9,47 @@
   <thead>
     <tr>
       <th scope="col">#</th>
-      <th scope="col">Product Name</th>
-      <th scope="col">Quantity</th>
+      <th scope="col">Product Name</th>     
       <th scope="col">Price</th>
+	  <th scope="col">Quantity</th>
+	  <th scope="col">Total Item Price</th>
 	  
     </tr>
   </thead>
   <tbody>
   	{% for cart in carts %}
     <tr>
-      <th scope="row">{{ forloop.counter }}</th>
-      <td>{{ cart.item.name }}</td>      
-      <td>
-        <a class="mr-2" href="{% url 'mainapp:decrease-cart' cart.item.slug %}"><span class="badge badge-light"><i class="fas fa-minus"></i></span></a>
-      {{ cart.quantity }}
-      <a class="ml-2" href="{% url 'mainapp:cart' cart.item.slug %}" ><span class="badge badge-light"><i class="fas fa-plus"></i></span></a>
-      </td>
-	  <td>{{ cart.item.price }}</td>
+		<th scope="row">{{ forloop.counter }}</th>
+		<td>{{ cart.item.name }}</td>   
+		<td>{{ cart.item.price }}</td>
+		  <td>
+			<a class="mr-2" href="{% url 'mainapp:decrease-cart' cart.item.slug %}"><span class="badge badge-light"><i class="fas fa-minus"></i></span></a>
+		  {{ cart.quantity }}
+		  <a class="ml-2" href="{% url 'mainapp:cart' cart.item.slug %}" ><span class="badge badge-light"><i class="fas fa-plus"></i></span></a>
+		  </td>	  
+		  <td>
+			{% if cart.item.discount_price %}
+					${{ cart.get_total_discount_item_price }}
+					<span class="badge badge-primary">Saving ${{ cart.get_amount_saved }}</span>
+				{% else %}
+					${{ cart.get_total }}
+				{% endif %}
+				<a style='color: red;' href="{% url 'cartapp:remove-cart' cart.item.slug %}">
+					<i class="fas fa-trash float-right"></i>
+				</a>
+		  </td>
     </tr>
 	{% endfor %}
     <tr>
       <th scope="row"></th>
-      <td colspan="2">Total</td>
-      <td>{{ order.get_totals| floatformat }}</td>
+      <td colspan="3">Total</td>
+      <td>{{ order.get_totals }}</td>
     </tr>
     <tr>
       <th scope="row"></th>
-      <td colspan="3" class="text-right ">
-        <button class="btn btn-warning mr-4">Continue Shoping</button>
-        <button class="btn btn-success mr-4">Proceed To Checkout</button>
+      <td colspan="5" class="text-right ">
+        <a href="{% url 'all_items' %}"> <button class="btn btn-primary ml-4" >Continue Shoping</button></a>
+        <button class="btn btn-warning mr-4">Proceed To Checkout</button>
       </td>
     </tr>
   </tbody>
