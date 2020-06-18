@@ -29,10 +29,10 @@
 		  </td>	  
 		  <td>
 			{% if cart.item.discount_price %}
-					${{ cart.get_total_discount_item_price }}
-					<span class="badge badge-primary">Saving ${{ cart.get_amount_saved }}</span>
+					{{ cart.get_total_discount_item_price }}
+					<span class="badge badge-primary">Saving {{ cart.get_amount_saved }}</span>
 				{% else %}
-					${{ cart.get_total }}
+					{{ cart.get_total }}
 				{% endif %}
 				<a style='color: red;' href="{% url 'cartapp:remove-cart' cart.item.slug %}">
 					<i class="fas fa-trash float-right"></i>

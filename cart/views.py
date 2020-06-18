@@ -7,7 +7,7 @@ from django.views.generic import ListView, DetailView, View
 from django.contrib import messages
 
 # Create your views here.
-
+@login_required
 def add_to_cart(request,slug):
 	item = get_object_or_404(Items,slug=slug)
 	order_item,created = Cart.objects.get_or_create(item=item,user=request.user)
@@ -28,7 +28,8 @@ def add_to_cart(request,slug):
 		order.orderitems.add(order_item)
 		messages.info(request,"This Item was added to your Cart")
 		return redirect("mainapp:all_items")
-			
+
+@login_required		
 def remove_from_cart(request, slug):
     item = get_object_or_404(Items, slug=slug)
     cart_qs = Cart.objects.filter(user=request.user, item=item)
@@ -81,7 +82,7 @@ def CartView(request):
         messages.warning(request, "You do not have any item in your Cart")
         return redirect("mainapp:home")
 
-
+@login_required
 def decreaseCart(request, slug):
     item = get_object_or_404(Items, slug=slug)
     order_qs = Order.objects.filter(
